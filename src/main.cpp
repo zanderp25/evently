@@ -1,8 +1,12 @@
 #include <iostream>
-#include <random>
+#include <array>
+#include <iomanip>
+// #include "event.h"
+#include "calendar.h"
 using namespace std;
+
 int main(){
-    
-    std::cout << "Hello, World!" << std::endl;
-    return 1;
+    Month m(11, 2023);
+    cout << m;
+    return 0;
 }
