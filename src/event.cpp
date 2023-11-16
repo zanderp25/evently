@@ -1,6 +1,6 @@
 #include "event.h"
 
-Event::Event(int year, int month, int day, int hour, int minute, std::string& name, std::string location = "TBD", std::string description = "No description"){
+Event::Event(int year, int month, int day, int hour, int minute, std::string name, std::string location = "TBD", std::string description = "No description"){
   Event::setYear(year);
   Event::setMonth(month);
   Event::setDay(day);

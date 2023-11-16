@@ -9,8 +9,7 @@ int main(){
     Month m(1, 2023);
     cout << m;
 
-    std::string party_name = "Party time ツ";
-    Event party(2023, 11, 16, 20, 30, party_name, "test", "test");
+    Event party(2023, 11, 16, 20, 30, "Party time ツ", "test", "test");
     cout << party << endl;
     cout << party.getEventDate() << endl;
     cout << party.getEventTime() << endl;

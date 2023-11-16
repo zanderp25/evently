@@ -6,7 +6,7 @@
 
 class Event{
     public:
-        Event(int year, int month, int day, int hour, int, std::string& name, std::string, std::string);
+        Event(int year, int month, int day, int hour, int, std::string name, std::string, std::string);
         friend std::ostream& operator<<(std::ostream&, const Event&);
         std::string getEventDate() const;
         std::string getEventTime() const;
