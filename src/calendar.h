@@ -1,3 +1,6 @@
+#ifndef CALENDAR_H
+#define CALENDAR_H
+
 #include <iostream>
 #include <iomanip>
 #include <array>
@@ -65,3 +68,5 @@ class Calendar{
     private:
         std::vector<Event> events;
 };
+
+#endif

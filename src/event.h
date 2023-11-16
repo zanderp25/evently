@@ -1,29 +1,34 @@
+#ifndef EVENT_H
+#define EVENT_H
+
 #include <string>
 #include <iostream>
 
 class Event{
     public:
-        Event(int year, int month, int day, std::string& name);
+        Event(int year, int month, int day, int hour, int, std::string& name, std::string, std::string);
         friend std::ostream& operator<<(std::ostream&, const Event&);
-        std::string getEventDate();
-        std::string getEventTime();
+        std::string getEventDate() const;
+        std::string getEventTime() const;
 
-        int getYear();
-        void setYear(int year);
-        int getMonth();
-        void setMonth(int month);
-        int getDay();
-        void setDay(int day);
-        int getHour();
-        void setHour(int hour);
-        int getMinute();
-        void setMinute(int minute);
-        std::string getName();
-        void setName(std::string name);
-        std::string getLocation();
-        void setLocation(std::string location);
-        std::string getDescription();
-        void setDescription(std::string description);
+        int getYear() const;
+        void setYear(int);
+        int getMonth() const;
+        std::string getMonthString() const;
+        void setMonth(int);
+        int getDay() const;
+        void setDay(int);
+        int getHour() const;
+        void setHour(int);
+        int getMinute() const;
+        void setMinute(int);
+        std::string getName() const;
+        void setName(std::string);
+        std::string getLocation() const;
+        void setLocation(std::string);
+        std::string getDescription() const;
+        void setDescription(std::string);
+
     private:
         int year;
         int month;
@@ -34,3 +39,5 @@ class Event{
         std::string location;
         std::string description;
 };
+
+#endif
