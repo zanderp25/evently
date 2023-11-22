@@ -1,5 +1,7 @@
 /build
 .vscode/
+.vs/
+/Evently/Debug
 
 # Prerequisites
 *.d
