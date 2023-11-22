@@ -36,6 +36,12 @@
     <ClInclude Include="Application.h">
       <Filter>main</Filter>
     </ClInclude>
+    <ClInclude Include="calendar.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="event.h">
+      <Filter>main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui.cpp">
@@ -63,6 +69,12 @@
       <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="calendar.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="event.cpp">
       <Filter>main</Filter>
     </ClCompile>
   </ItemGroup>
