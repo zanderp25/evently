@@ -1,4 +1,5 @@
-./build.sh
+cmake -B build/ -S src/
+cmake --build build/
 if [ $? -eq 0 ]; then
     echo "-------------------"
     echo ""
