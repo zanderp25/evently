@@ -1,5 +1,4 @@
 #include <iomanip>
-#include <ctime>
 #include "calendar.h"
 
 Month::Month(int month, int year): month(month), year(year){
@@ -52,10 +51,15 @@ Month::Month(int month, int year): month(month), year(year){
         Then use std::localtime and std::gmtime to convert a std::time_t to a std::tm.
     */
 
-    std::tm monthStart = {0, 0, 0, 1, month - 1, year - 1900}; // sec, min, hour, 1-indexed day, 0-indexed month, year since 1900
-    std::time_t monthStart_t = std::mktime(&monthStart);
-    const std::tm* monthStart_tm = std::localtime(&monthStart_t);
-    startWkDay = static_cast<day>(monthStart_tm->tm_wday);
+
+    // https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week#Disparate_variation
+    // I changed the previous solution to this because any year less than 1970 would break everything lol
+
+    int mon = (month + 10) % 12;
+    int yr = year - mon / 10;
+    int cent = yr / 100;
+    startWkDay = static_cast<day>((1 + static_cast<int>(2.6 * mon - 0.2) + (yr % 100) + (yr % 100 / 4) + (cent / 4) - (2 * cent)) % 7);
+
 
     int swd = 1-Month::getStartWkDay();
     for(int i = 0; i < 6; i++){

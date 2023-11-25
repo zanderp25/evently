@@ -1,11 +1,12 @@
 #include "Application.h"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include <stdio.h>
+#include <string>
 #include "calendar.h"
 
 namespace EventlyGUI {
     void RenderUI() {
-
         // Call the main render functions
         RenderMainView();
 
@@ -34,7 +35,6 @@ namespace EventlyGUI {
 
     void RenderCalendarView() {
 		ImGui::Begin("Calendar View");
-		ImGui::Text("This is the calendar view.");
 
         static int selectedMonth = 10;
         static int selectedYear = 2023;
@@ -43,14 +43,6 @@ namespace EventlyGUI {
 
         const char* months[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
         								"October", "November", "December" };
-
-        /*char* years[1000];
-
-        for (int i = 1900; i < 2900; i++){
-            char year[5];
-            sprintf(year, "%d", i);
-            years[i] = year;
-        }*/
 
         // Header for the calendar
         if (ImGui::Button("<")) {
@@ -63,12 +55,21 @@ namespace EventlyGUI {
 			}
 		}
         ImGui::SameLine();
-        ImGui::Text("%s %d", currentMonth.getMonthString().c_str(), currentMonth.getYear());
+        ImGui::SetNextItemWidth(100);
+        ImGui::Combo("##month", &selectedMonth, months, IM_ARRAYSIZE(months)); // ## hides the label
         ImGui::SameLine();
-        ImGui::Combo(" ", &selectedMonth, months, IM_ARRAYSIZE(months));
+        if (ImGui::Button("-")) {
+            selectedYear--;
+        }
         ImGui::SameLine();
-        ImGui::Combo(" ", &selectedMonth, years, IM_ARRAYSIZE(years));
-		ImGui::SameLine();
+        //ImGui::Text("%d", selectedYear);
+        ImGui::SetNextItemWidth(40);
+        ImGui::InputInt("##year", &selectedYear, 0);
+        ImGui::SameLine();
+        if (ImGui::Button("+")) {
+			selectedYear++;
+		}
+        ImGui::SameLine();
 		if (ImGui::Button(">")) {
             if (selectedMonth == 11) {
 				selectedMonth = 0;
