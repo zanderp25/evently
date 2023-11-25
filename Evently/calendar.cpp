@@ -60,6 +60,7 @@ Month::Month(int month, int year): month(month), year(year){
     int cent = yr / 100;
     startWkDay = static_cast<day>((1 + static_cast<int>(2.6 * mon - 0.2) + (yr % 100) + (yr % 100 / 4) + (cent / 4) - (2 * cent)) % 7);
 
+    if (startWkDay < 0) startWkDay = static_cast<day>(7 + startWkDay); // fixes that weird bug where the day of the week is negative
 
     int swd = 1-Month::getStartWkDay();
     for(int i = 0; i < 6; i++){

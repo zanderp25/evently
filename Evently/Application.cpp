@@ -97,19 +97,28 @@ namespace EventlyGUI {
                 ImGui::TableNextRow();
                 for (size_t day = 0; day < 7; ++day) {
                     char buttonLabel[3];
+                    char listLabel[10];
                     sprintf(buttonLabel, "%d", currentMonth.getDay(week, day));
+                    sprintf(listLabel, "Events %d", currentMonth.getDay(week, day));
                     ImGui::TableSetColumnIndex(day);
                     if (currentMonth.getDay(week, day) != 0) {
                         ImGui::PushID((int)(week * day));
-                        ImGui::Button(buttonLabel);
+                        if (ImGui::Button(buttonLabel)) {
+							// Create an event for this day
+						}
                         ImGui::PopID();
+
+                        ImGui::BeginChild(listLabel, ImVec2(ImGui::GetContentRegionAvail().x, 75), ImGuiChildFlags_None, ImGuiWindowFlags_None); // Scrollable region
+                        // Create a loop that makes a button for each event on this day
+                        // Make the label of the button the name of the event
+                        // When the button is clicked, open a window that shows the details of the event
+                        ImGui::EndChild();
                     }
                 }
             }
             ImGui::EndTable();
         }
-        /*if (ImGui::IsItemClicked())
-            ClickedOnDay();*/
+
 		ImGui::End();
 	}
 
