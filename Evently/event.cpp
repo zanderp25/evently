@@ -154,3 +154,11 @@ std::string Event::getDescription() const {
 void Event::setDescription(std::string description){
   Event::description = description;
 }
+
+unsigned int Event::getID() const {
+  return Event::id;
+}
+
+void Event::setID(unsigned int id) {
+  Event::id = id;
+}

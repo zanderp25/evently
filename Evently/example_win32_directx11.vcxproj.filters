@@ -77,5 +77,11 @@
     <ClCompile Include="event.cpp">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="month.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="time.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

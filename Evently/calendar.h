@@ -55,20 +55,33 @@ class Month{
         std::array<std::array<int, 7>, 6> days;
 };
 
+namespace Time{
+    std::string getCurrentTime();
+    std::string getCurrentDate();
+    int getCurrentYear();
+    int getCurrentMonth();
+    int getCurrentDay();
+    int getCurrentHour();
+    int getCurrentMinute();
+    int getCurrentSecond();
+    int getCurrentWeekday();
+    int getCurrentTimeZone();
+}
+
 // The Calendar class provides a list of events.
 // There are a few main methods that will be useful for the GUI:
 // addEvent, editEvent, getEvent, removeEvent, getEvents
-//class Calendar{
-//    public:
-//        Calendar();
-//        friend std::ostream& operator<<(std::ostream&, Calendar&); // print list of events
-//        void addEvent(Event e);
-//        void editEvent(Event e);
-//        Event getEvent(int index);
-//        void removeEvent(int index);
-//        std::vector<Event> getEvents();
-//    private:
-//        std::vector<Event> events;
-//};
+class Calendar{
+    public:
+        Calendar();
+        void addEvent(Event e);
+        void editEvent(Event e);
+        Event getEvent(int index);
+        void removeEvent(Event e);
+        std::vector<Event> getEvents();
+        std::vector<Event> getEvents(int year, int month, int day);
+    private:
+        std::vector<Event> events;
+};
 
 #endif
