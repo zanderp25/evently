@@ -102,6 +102,7 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..;..\..\backends;%(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -173,6 +174,8 @@
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="month.cpp" />
+    <ClCompile Include="time.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

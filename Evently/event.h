@@ -34,8 +34,8 @@ class Event{
         void setLocation(std::string);
         std::string getDescription() const;
         void setDescription(std::string);
-        
-
+        unsigned int getID() const;
+        void setID(unsigned int);
     private:
         int year;
         int month;
@@ -43,6 +43,8 @@ class Event{
         int hour;
         int minute;
         float duration;
+
+        unsigned int id = 0;
 
         // Time Zone is the difference from UTC
         // Eg: Eastern Standard Time is -500 (UTC-5) and Australian Central Standard Time is 930 (UTC+9:30)
