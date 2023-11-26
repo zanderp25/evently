@@ -45,6 +45,7 @@ namespace EventlyGUI {
         static int selectedMonth = 10;
         static int selectedYear = 2023;
 
+        static Calendar calendar;
         Month currentMonth(selectedMonth + 1 , selectedYear);
 
         const char* months[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
