@@ -40,6 +40,11 @@ std::string Event::getEventTimeString() const {
   return std::to_string(Event::getHour()) + ":" + std::string(2 - std::min(2, (int)minute.length()), '0').append(minute) + " for " + Event::getDurationString();
 }
 
+std::string Event::getTimeZoneString() const{
+  return ((Event::getTimeZone() < 0)? "UTC": "UTC+") + std::to_string(static_cast<int>(Event::getTimeZone()/100)) + ":" +
+      std::string(2 - std::min(2, (int)std::to_string(Event::getTimeZone() % 100).length()), '0').append(std::to_string(Event::getTimeZone() % 100));
+}
+
 int Event::getYear() const {
   return Event::year;
 }

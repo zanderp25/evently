@@ -27,6 +27,7 @@ class Event{
         std::string getDurationString() const;
         void setDuration(float);
         int getTimeZone() const;
+        std::string getTimeZoneString() const;
         void setTimeZone(int);
         std::string getName() const;
         void setName(std::string);

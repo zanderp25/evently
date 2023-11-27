@@ -66,6 +66,7 @@ namespace Time{
     int getCurrentSecond();
     int getCurrentWeekday();
     int getCurrentTimeZone();
+    std::string getCurrentTimeZoneString();
 }
 
 // The Calendar class provides a list of events.

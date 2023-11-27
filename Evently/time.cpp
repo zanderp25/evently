@@ -93,4 +93,10 @@ namespace Time {
 		minute -= now_utc_tm->tm_min;
 		return 100 * hour + minute;
 	}
+
+	std::string getCurrentTimeZoneString() {
+		int timeZone = getCurrentTimeZone();
+		return ((timeZone < 0) ? "UTC" : "UTC+") + std::to_string(static_cast<int>(timeZone / 100)) + ":" +
+			std::string(2 - std::min(2, static_cast<int>(std::to_string(timeZone % 100).length())), '0').append(std::to_string(timeZone % 100));
+	}
 }

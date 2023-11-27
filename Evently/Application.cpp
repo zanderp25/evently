@@ -7,6 +7,7 @@
 
 namespace EventlyGUI {
     static bool showCreateEventWindow = false;
+    static bool showEventInfoWindow = false;
     static Calendar calendar;
     static int selectedDate[3] = {2023, 1, 1};
     static int selectedEventID = -1;
@@ -25,7 +26,7 @@ namespace EventlyGUI {
         }
 
         // show demo window
-        static bool show_demo_window = true;
+        static bool show_demo_window = false;
         if (show_demo_window) {
             ImGui::ShowDemoWindow(&show_demo_window);
         }
@@ -36,6 +37,7 @@ namespace EventlyGUI {
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
         RenderCalendarView();
         CreateEventWindow();
+        EventInfo();
         ResetDocking();
 	}
 
@@ -45,7 +47,6 @@ namespace EventlyGUI {
         static int selectedMonth = 10;
         static int selectedYear = 2023;
 
-        static Calendar calendar;
         Month currentMonth(selectedMonth + 1 , selectedYear);
 
         const char* months[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
@@ -90,7 +91,7 @@ namespace EventlyGUI {
         ImGui::SameLine();
         ImGui::Spacing();
         ImGui::SameLine();
-        ImGui::Text("%s %s %d", Time::getCurrentDate().c_str(), Time::getCurrentTime().c_str(), Time::getCurrentTimeZone());
+        ImGui::Text("%s %s %s", Time::getCurrentDate().c_str(), Time::getCurrentTime().c_str(), Time::getCurrentTimeZoneString().c_str());
 
     
         if (ImGui::BeginTable("table1", 7, ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_BordersOuterV, { 0, 0 }))
@@ -141,7 +142,8 @@ namespace EventlyGUI {
                             char eventLabel[50];
                             sprintf(eventLabel, "%s##%d", events[i].getName().c_str(), events[i].getID());
                             if (ImGui::Button(eventLabel)) {
-                                // show a window with the event details
+                                selectedEventID = events[i].getID();
+                                showEventInfoWindow = true;
 							}
 							ImGui::PopID();
 						}
@@ -266,8 +268,33 @@ namespace EventlyGUI {
 
 
 	}
+    void EventInfo(){
+        if(showEventInfoWindow){
+            Event event = calendar.getEvent(selectedEventID);
+            ImGui::Begin(event.getName().c_str(), &showEventInfoWindow, ImGuiWindowFlags_AlwaysAutoResize);
+            ImGui::Text("Event date: "); ImGui::SameLine();
+            ImGui::Text(event.getEventDate().c_str()); // you can combine it into one line like this so you don't have to do the variable
+                                                       // though you can also do it like ImGui::Text("Event date: %s", event.getEventDate().c_str()); (%s means string)
+            // Event time??
+            // **NOTE: Show in the current timezone (Time::getCurrentTimeZone()), compare to the event's timezone**
+            
+            //ImGui::Text("Event duration and timezone: "); ImGui::SameLine(); // I don't think this is needed anymore
+            ImGui::Text("%s, %s", event.getDurationString().c_str(), event.getTimeZoneString().c_str()); // Jordan had a duration string function and i made a timezone string function
+
+            ImGui::Text("Event location: "); ImGui::SameLine();
+            std::string location = event.getLocation();
+            ImGui::Text(location.c_str());
+
+            ImGui::Text("Event description: "); ImGui::SameLine();
+            std::string description = event.getDescription();
+            ImGui::Text(description.c_str());
+
+            // edit and delete buttons, maybe??
+            ImGui::End();
+        }
+    }
 
     void ResetDocking() {
-        
+        // I have no idea how this works lol
     }
 }
