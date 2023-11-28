@@ -6,11 +6,18 @@
 #include "calendar.h"
 
 namespace EventlyGUI {
+    static bool reset = true;
     static bool showCreateEventWindow = false;
     static bool showEventInfoWindow = false;
+    static bool showEditEventWindow = false;
+    static bool showSearchWindow = false;
     static Calendar calendar;
     static int selectedDate[3] = {2023, 1, 1};
     static int selectedEventID = -1;
+    static bool gamerKat = false;
+
+    static int selectedMonth = 10;
+    static int selectedYear = 2023;
 
     void RenderUI() {
         // Call the main render functions
@@ -37,15 +44,14 @@ namespace EventlyGUI {
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
         RenderCalendarView();
         CreateEventWindow();
+        EditEventWindow();
         EventInfo();
         ResetDocking();
+        DisplaySearchWindow();
 	}
 
     void RenderCalendarView() {
 		ImGui::Begin("Calendar View");
-
-        static int selectedMonth = 10;
-        static int selectedYear = 2023;
 
         Month currentMonth(selectedMonth + 1 , selectedYear);
 
@@ -92,8 +98,30 @@ namespace EventlyGUI {
         ImGui::Spacing();
         ImGui::SameLine();
         ImGui::Text("%s %s %s", Time::getCurrentDate().c_str(), Time::getCurrentTime().c_str(), Time::getCurrentTimeZoneString().c_str());
+        ImGui::SameLine();
 
-    
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0,0,0,0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0,0,0,0));
+        if(ImGui::Button("##invisiblegamerkatbutton", ImVec2(100, 10))){}
+		ImGui::PopStyleColor(3);
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Today")) {
+			selectedMonth = Time::getCurrentMonth() - 1;
+			selectedYear = Time::getCurrentYear();
+		}
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Search")) {
+            showSearchWindow = true;
+        }
+
+
+
+        
+
         if (ImGui::BeginTable("table1", 7, ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_BordersOuterV, { 0, 0 }))
         {
             ImGui::TableSetupColumn("Sunday", ImGuiTableColumnFlags_None, 0);
@@ -165,7 +193,6 @@ namespace EventlyGUI {
             const char* months[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
                                             "October", "November", "December" };
 
-            static bool reset = true;
 
             static char eventName[50];
             static char eventDescription[100];
@@ -268,18 +295,144 @@ namespace EventlyGUI {
 
 
 	}
+
+    void EditEventWindow(){
+        if (showEditEventWindow) {
+            
+            ImGui::Begin("Edit event: ", &showEditEventWindow, ImGuiWindowFlags_AlwaysAutoResize);
+
+            const char* months[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
+                                            "October", "November", "December" };
+
+            Event event = calendar.getEvent(selectedEventID);
+
+            static char eventName[50];
+            static char eventDescription[100];
+            static char eventLocation[50];
+
+            static int selectedYear;
+            static int selectedMonth;
+            static int selectedDay;
+            static int selectedHour;
+            static int selectedMinute;
+            static float selectedDuration;
+            static int selectedTimeZone;
+
+            if (reset)
+            {
+                
+                strcpy(eventName, event.getName().c_str());
+                
+                strcpy(eventDescription, event.getDescription().c_str());
+              
+                strcpy(eventLocation, event.getLocation().c_str());
+
+                selectedYear = event.getYear();
+                selectedMonth = event.getMonth();
+                selectedDay = event.getDay();
+                selectedHour = event.getHour();
+                selectedMinute = event.getMinute();
+                selectedDuration = event.getDuration();
+                selectedTimeZone = event.getTimeZone();
+
+                reset = false;
+            }
+            
+            Month currentMonth(selectedMonth + 1, selectedYear);
+
+            ImGui::Text("Event Name        "); ImGui::SameLine();
+            ImGui::InputText("##event name", eventName, IM_ARRAYSIZE(eventName));
+            ImGui::Text("Event Description "); ImGui::SameLine();
+            ImGui::InputText("##event description", eventDescription, IM_ARRAYSIZE(eventDescription));
+            ImGui::Text("Event Location    "); ImGui::SameLine();
+            ImGui::InputText("##event location", eventLocation, IM_ARRAYSIZE(eventLocation));
+
+            ImGui::Text("Event Date"); ImGui::SameLine();
+            ImGui::SetNextItemWidth(100);
+            ImGui::Combo("##month", &selectedMonth, months, IM_ARRAYSIZE(months));
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(80);
+            ImGui::InputInt("##day", &selectedDay);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(90);
+            ImGui::InputInt("##year", &selectedYear);
+
+            ImGui::Text("Event Time"); ImGui::SameLine();
+            ImGui::SetNextItemWidth(40);
+            ImGui::InputInt("##hour", &selectedHour, 0);
+            ImGui::SameLine();
+            ImGui::Text(":"); ImGui::SameLine();
+            ImGui::SetNextItemWidth(40);
+            ImGui::InputInt("##minute", &selectedMinute, 0);
+            ImGui::SameLine();
+            ImGui::Text("Duration"); ImGui::SameLine();
+            ImGui::SetNextItemWidth(40);
+            ImGui::InputFloat("##duration", &selectedDuration, 0.0f, 0.0f, "%.1f");
+            ImGui::SameLine();
+            ImGui::Text("hours");
+
+            ImGui::Text("Time Zone"); ImGui::SameLine();
+            ImGui::SetNextItemWidth(40);
+            ImGui::InputInt("##time zone", &selectedTimeZone, 0);
+
+            if (selectedDay < 1) {
+                selectedMonth--;
+                currentMonth = Month((selectedMonth + 1 == 0) ? 12 : selectedMonth + 1, selectedYear);
+                selectedDay = currentMonth.getNumDays();
+            }
+            else if (selectedDay > currentMonth.getNumDays()) {
+                selectedMonth++;
+                currentMonth = Month((selectedMonth + 1 == 13) ? 1 : selectedMonth + 1, selectedYear);
+                selectedDay = 1;
+            }
+
+            if (selectedMonth < 0) {
+                selectedYear--;
+                selectedMonth = 11;
+            }
+            else if (selectedMonth > 11) {
+                selectedYear++;
+                selectedMonth = 0;
+            }
+
+            if (ImGui::Button("Save")) {
+				//Event newEvent(selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute, selectedDuration, selectedTimeZone, eventName, eventLocation, eventDescription);
+                event.setDay(selectedDay);
+                event.setMonth(selectedMonth);
+                event.setYear(selectedYear);
+                event.setHour(selectedHour);
+                event.setMinute(selectedMinute);
+                event.setDuration(selectedDuration);
+                event.setTimeZone(selectedTimeZone);
+                event.setName(eventName);
+                event.setLocation(eventLocation);
+                event.setDescription(eventDescription);
+                
+				calendar.editEvent(event);
+				showEditEventWindow = false;
+                reset = true;
+			}
+
+            ImGui::SameLine();
+			if (ImGui::Button("Cancel")) {
+                showEditEventWindow = false;
+                reset = true;
+            }
+
+            ImGui::End();
+        }
+    }
+
     void EventInfo(){
         if(showEventInfoWindow){
             Event event = calendar.getEvent(selectedEventID);
+
             ImGui::Begin(event.getName().c_str(), &showEventInfoWindow, ImGuiWindowFlags_AlwaysAutoResize);
-            ImGui::Text("Event date: "); ImGui::SameLine();
-            ImGui::Text(event.getEventDate().c_str()); // you can combine it into one line like this so you don't have to do the variable
-                                                       // though you can also do it like ImGui::Text("Event date: %s", event.getEventDate().c_str()); (%s means string)
-            // Event time??
-            // **NOTE: Show in the current timezone (Time::getCurrentTimeZone()), compare to the event's timezone**
+
+			ImGui::Text("Event date:  %s", event.getEventDate().c_str());
             
-            //ImGui::Text("Event duration and timezone: "); ImGui::SameLine(); // I don't think this is needed anymore
-            ImGui::Text("%s, %s", event.getDurationString().c_str(), event.getTimeZoneString().c_str()); // Jordan had a duration string function and i made a timezone string function
+            ImGui::Text("Event time: "); ImGui::SameLine();
+            ImGui::Text("%s, %s", (event.getEventTimeString().c_str()), event.getTimeZoneString().c_str());
 
             ImGui::Text("Event location: "); ImGui::SameLine();
             std::string location = event.getLocation();
@@ -289,7 +442,43 @@ namespace EventlyGUI {
             std::string description = event.getDescription();
             ImGui::Text(description.c_str());
 
-            // edit and delete buttons, maybe??
+
+            if (ImGui::Button("Edit"))
+            {
+				showEditEventWindow = true;
+			}
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Delete"))
+            {
+                showEventInfoWindow = false;
+                calendar.removeEvent(event);
+            }
+            
+            ImGui::End();
+        }
+    }
+    void DisplaySearchWindow(){
+        if(showSearchWindow){
+            ImGui::Begin("Search", &showSearchWindow, ImGuiWindowFlags_AlwaysAutoResize);
+            static ImGuiTextFilter filter; 
+            filter.Draw();
+            std::vector<Event> events = calendar.getEvents();
+
+            for (int i = 0; i < events.size(); i++)
+            {
+                if (filter.PassFilter(events[i].getName().c_str())) {
+                    char buttonLabel[60];
+                    sprintf(buttonLabel, "%s##search%d", events[i].getName().c_str(), events[i].getID());
+                    if (ImGui::Button(buttonLabel)) {
+                        selectedMonth = events[i].getMonth() - 1;
+                        selectedYear = events[i].getYear();
+                        selectedEventID = events[i].getID();
+                        showEventInfoWindow = true;
+                    }
+                }
+            }
             ImGui::End();
         }
     }
@@ -298,3 +487,5 @@ namespace EventlyGUI {
         // I have no idea how this works lol
     }
 }
+
+

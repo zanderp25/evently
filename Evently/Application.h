@@ -6,6 +6,8 @@ namespace EventlyGUI{
     void RenderMainView();
     void RenderCalendarView();
     void CreateEventWindow();
+    void EditEventWindow();
     void EventInfo();
     void ResetDocking();
+    void DisplaySearchWindow();
 }

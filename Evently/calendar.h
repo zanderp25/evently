@@ -76,13 +76,14 @@ class Calendar{
     public:
         Calendar();
         void addEvent(Event e);
-        void editEvent(Event e);
+        void editEvent(Event a);
         Event getEvent(int index);
         void removeEvent(Event e);
         std::vector<Event> getEvents();
         std::vector<Event> getEvents(int year, int month, int day);
     private:
         std::vector<Event> events;
+        int IndexID = 0;
 };
 
 #endif

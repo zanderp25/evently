@@ -29,20 +29,22 @@ std::vector<Event> Calendar::getEvents(int year, int month, int day) {
 }
 
 void Calendar::addEvent(Event e) {
-	e.setID(events.size());
+	e.setID(IndexID++);
 	events.push_back(e);
 }
 
 void Calendar::editEvent(Event e){
-    unsigned int index = getIndexForID(events, e.getID());
+	unsigned int index = getIndexForID(events, e.getID());
 	events[index] = e;
 }
 
 void Calendar::removeEvent(Event e){
     unsigned int index = getIndexForID(events, e.getID());
     events.erase(events.begin() + index);
+	
 }
 
 Event Calendar::getEvent(int id) {
 	return events[getIndexForID(events, id)];
+	
 }
