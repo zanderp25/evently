@@ -480,7 +480,7 @@ namespace EventlyGUI {
             for (int i = 0; i < events.size(); i++)
             {
                 float hue = hues[events[i].getColor()];
-                if (filter.PassFilter(events[i].getName().c_str())) {
+                if (filter.PassFilter(events[i].getName().c_str()) || filter.PassFilter(events[i].getColorString().c_str())) {
                     char buttonLabel[60];
                     sprintf(buttonLabel, "%s##search%d", events[i].getName().c_str(), events[i].getID());
                     ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(hue, 0.6f, 0.5f));
@@ -492,9 +492,15 @@ namespace EventlyGUI {
                         selectedEventID = events[i].getID();
                         showEventInfoWindow = true;
                     }
+
+                    
+                  
                     ImGui::PopStyleColor(3);
                 }
             }
+
+       
+
             ImGui::End();
         }
     }
