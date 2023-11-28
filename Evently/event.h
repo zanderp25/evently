@@ -4,9 +4,13 @@
 #include <string>
 #include <iostream>
 
+
+
 class Event{
+
+const char* colors[6] = { "Red", "Orange", "Yellow", "Green", "Blue", "Purple" };
     public:
-        Event(int year, int month, int day, int hour, int minute, float duration, int timeZone, std::string name, std::string location, std::string description);
+        Event(int year, int month, int day, int hour, int minute, float duration, int timeZone, std::string name, std::string location, std::string description, int color = 4);
         friend std::ostream& operator<<(std::ostream&, const Event&);
         std::string getEventDate() const;
         std::string getEventTime() const;
@@ -37,6 +41,9 @@ class Event{
         void setDescription(std::string);
         unsigned int getID() const;
         void setID(unsigned int);
+        int getColor() const;
+        std::string getColorString() const;
+        void setColor(int);
     private:
         int year;
         int month;
@@ -44,6 +51,7 @@ class Event{
         int hour;
         int minute;
         float duration;
+        int color;
 
         unsigned int id = 0;
 

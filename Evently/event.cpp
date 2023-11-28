@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "event.h"
 
-Event::Event(int year, int month, int day, int hour, int minute, float duration, int timeZone, std::string name, std::string location = "TBD", std::string description = "No description"){
+Event::Event(int year, int month, int day, int hour, int minute, float duration, int timeZone, std::string name, std::string location = "TBD", std::string description = "No description", int color) {
   Event::setYear(year);
   Event::setMonth(month);
   Event::setDay(day);
@@ -14,6 +14,7 @@ Event::Event(int year, int month, int day, int hour, int minute, float duration,
   Event::setName(name);
   Event::setLocation(location);
   Event::setDescription(description);
+  Event::setColor(color);
 }
 
 std::ostream& operator<<(std::ostream &os, const Event &event){
@@ -166,4 +167,16 @@ unsigned int Event::getID() const {
 
 void Event::setID(unsigned int id) {
   Event::id = id;
+}
+
+int Event::getColor() const {
+  return Event::color;
+}
+
+std::string Event::getColorString() const {
+    return Event::colors[Event::getColor()];
+}
+
+void Event::setColor(int color) {
+  Event::color = color;
 }
